@@ -2,12 +2,8 @@
 
 % Library for lambdas
 use_module(library(yall)).
-% Library with dictionaries utilities
+% Library with dictionary utilities
 % use_module(library(dicts)).
-
-t(Xt, Yt).
-h(Xh, Yh).
-o(Xo, Yo).
 
 minX(0).
 maxX(20).
@@ -30,7 +26,7 @@ ismoveavailable(
   not(member((X, Y), Visited)).
 
 % Having current coordinates prove coordinates where it is possible to move
-availablemoves(
+possiblemoves(
   (CurX, CurY), % current x and y coodinates of the player holding the ball
   Visited, % list of visited cells by a player
   (NewX, CurY) % new coordinates to move to according to rules
@@ -39,17 +35,17 @@ availablemoves(
   NewX is CurX + 1,
   ismoveavailable((NewX, CurY), Visited).
 
-availablemoves((CurX, CurY), Visited, (NewX, CurY)) :-
+possiblemoves((CurX, CurY), Visited, (NewX, CurY)) :-
   % Decrement X coordinate
   NewX is CurX - 1,
   ismoveavailable((NewX, CurY), Visited).
 
-availablemoves((CurX, CurY), Visited, (CurX, NewY)) :-
+possiblemoves((CurX, CurY), Visited, (CurX, NewY)) :-
   % Increment Y coordinate
   NewY is CurY + 1,
   ismoveavailable((CurX, NewY), Visited).
 
-availablemoves((CurX, CurY), Visited, (CurX, NewY)) :-
+possiblemoves((CurX, CurY), Visited, (CurX, NewY)) :-
   % Decrement Y coordinate
   NewY is CurY - 1,
   ismoveavailable((CurX, NewY), Visited).
@@ -59,6 +55,8 @@ solvegamerec(
   (CurX, CurY),
   PassHappened,
   Visited,
+  Actions,
+  NumMoves,
   Actions,
   NumMoves
 ) :-
@@ -70,10 +68,20 @@ solvegamerec(
   PassHappened, % value which is true, if a pass has hapenned during the play
   Visited, % list of visited cells by a player
   Actions, % list of pairs (action_type, (x, y))
-  NumMoves % number of moves done so far
+  NumMoves, % number of moves done so far
+  OutActions,
+  OutNumMoves
 ) :-
+  % Recursive case - move
+  % format('CurX = ~d CurY = ~d|~n', [CurX, CurY]),
+  possiblemoves((CurX, CurY), Visited, (NewX, NewY)), % store possible moves in NewPoint
+  % format('NewX = ~d NewY = ~d|~n', [NewX, NewY]),
+  not(o(NewX, NewY)), % if orc stands on the new coordinates - discard the solution
+  NewActions = [(move, (NewX, NewY)) | Actions],
+  NewNumMoves is NumMoves + 1,
+  solvegamerec((NewX, NewY), false, [(CurX, CurY) | Visited], NewActions, NewNumMoves, OutActions, OutNumMoves),
   true.
 
 % Function that solves the game and returns the path along with its length
-solvegame(Visited, NumMoves) :-
-  solvegamerec((0, 0), (0, 0), false, Visited, NumMoves).
+solvegame(Actions, NumMoves) :-
+  solvegamerec((0, 0), false, [], [], 0, Actions, NumMoves).
