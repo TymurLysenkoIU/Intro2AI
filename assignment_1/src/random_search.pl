@@ -54,30 +54,6 @@ possiblemoves((CurX, CurY), Visited, (CurX, NewY)) :-
   NewY is CurY - 1,
   ismoveavailable((CurX, NewY), Visited).
 
-% check if there is a touchdown point near the current one
-hastouchdownnearby(
-  (CurX, CurY), % current x and y coodinates of the player holding the ball
-  (NewX, CurY) % coordinates of the touchdown point
-) :-
-  % Increment X coordinate
-  NewX is CurX + 1,
-  t(NewX, CurY).
-
-hastouchdownnearby((CurX, CurY), (NewX, CurY)) :-
-  % Decrement X coordinate
-  NewX is CurX - 1,
-  t(NewX, CurY).
-
-hastouchdownnearby((CurX, CurY), (CurX, NewY)) :-
-  % Increment Y coordinate
-  NewY is CurY + 1,
-  t(CurX, NewY).
-
-hastouchdownnearby((CurX, CurY), (CurX, NewY)) :-
-  % Decrement Y coordinate
-  NewY is CurY - 1,
-  t(CurX, NewY).
-
 % Finds the solutions to the game
 solvegamerec(
   (CurX, CurY),
@@ -92,21 +68,7 @@ solvegamerec(
   t(CurX, CurY),
   !.
 
-solvegamerec(
-  (CurX, CurY),
-  PassHappened,
-  Visited,
-  Actions,
-  NumMoves,
-  OutActions,
-  OutNumMoves
-) :-
-  % Base case: the touchdown point is near
-  hastouchdownnearby((CurX, CurY), (NewX, NewY)),
-  OutActions = [(move, (NewX, NewY)) | Actions],
-  OutNumMoves is NumMoves + 1,
-  !.
-
+% TODO: randomize
 solvegamerec(
   (CurX, CurY), % current x and y coodinates of the player holding the ball
   PassHappened, % value which is true, if a pass has hapenned during the play
@@ -116,13 +78,28 @@ solvegamerec(
   OutActions,
   OutNumMoves
 ) :-
-  % Recursive case - move to an adjacent point
-  possiblemoves((CurX, CurY), Visited, (NewX, NewY)),
+  % Recursive case - move
+  % format('CurX = ~d CurY = ~d|~n', [CurX, CurY]),
+  possiblemoves((CurX, CurY), Visited, (NewX, NewY)), % store possible moves in NewPoint
+  % format('NewX = ~d NewY = ~d|~n', [NewX, NewY]),
   not(o(NewX, NewY)), % if orc stands on the new coordinates - discard the solution
   NewActions = [(move, (NewX, NewY)) | Actions],
   NewNumMoves is NumMoves + 1,
   solvegamerec((NewX, NewY), false, [(CurX, CurY) | Visited], NewActions, NewNumMoves, OutActions, OutNumMoves).
 
+% TODO: pass the ball
+% solvegamerec(
+%   (CurX, CurY),
+%   PassHappened,
+%   Visited,
+%   Actions,
+%   NumMoves,
+%   OutActions,
+%   OutNumMoves
+% ) :-
+
 % Function that solves the game and returns the path along with its length
 solvegame(Actions, NumMoves) :-
   solvegamerec((0, 0), false, [], [], 0, Actions, NumMoves).
+
+% TODO: get first 100 attempts and find the minimal solution
