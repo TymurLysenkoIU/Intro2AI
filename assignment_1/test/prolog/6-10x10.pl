@@ -1,5 +1,10 @@
 % Map of the size 10x10 with many orcs, human initially surrounded by orcs and touchdown is in a corner
 
+minX(0).
+maxX(9).
+minY(0).
+maxY(9).
+
 h(5, 5).
 o(0, 1).
 o(0, 5).

@@ -222,9 +222,16 @@ solvegamerec(
   % Recursive case - move to an adjacent point
   possiblemoves((CurX, CurY), Visited, (NewX, NewY)), % get new coordinates to move in
   not(o(NewX, NewY)), % if orc stands on the new coordinates - discard the solution
-  % TODO: modify actions only if the new coordinates are not other human's coordinates
-  NewActions = [(move, (NewX, NewY)) | Actions], % add move to new coordinates to the lsit of actions
-  NewNumMoves is NumMoves + 1, % increment the number of actions
+  ( h(NewX, NewY) ->
+    (
+      NewActions = Actions,
+      NewNumMoves = NumMoves
+    );
+    (
+      NewActions = [(move, (NewX, NewY)) | Actions], % add move to new coordinates to the lsit of actions
+      NewNumMoves is NumMoves + 1 % increment the number of actions
+    )
+  ),
   solvegamerec(
     (NewX, NewY),
     PassHappened,
