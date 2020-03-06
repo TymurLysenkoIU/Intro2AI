@@ -9,4 +9,8 @@ solutionstofile(FilePath) :-
 solutionsordered(L) :-
   setof((N, A), solvegame(A, N), L).
 
+% ['backtrack.pl'].
+% ['../test/prolog/1-from-task.pl'].
+% ['../script/debug_tools.pl'].
+
 % findall(N, solvegame(A, N), L), length(L, Len), min_list(L, M).

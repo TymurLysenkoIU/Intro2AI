@@ -88,81 +88,98 @@ hastouchdownnearby((CurX, CurY), (CurX, NewY)) :-
   t(CurX, NewY).
 
 % Checks if coordinates of the ball are valid, i. e. not ork and not out of the boundaries
-isvalidpositionofball((X, Y)) :-
+isvalidpositionofball(
+  (X, Y), % coordinates of the ball
+  Visited % list of visited points
+) :-
   not(o(X, Y)),
-  arecoordinateswithinboundaries((X, Y)).
+  arecoordinateswithinboundaries((X, Y)),
+  % no need for the ball to fly beyond the visited points,
+  % since the more efficient solution will be checked, when
+  % a ball will be passed from these coordinates
+  not(member((X, Y), Visited)).
 
 % Checks if the ball can be thrown in the given direction (specified by the velocity vector)
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (1, 0) % Right velocity vector
 ) :-
-  isvalidpositionofball((CurX + 1, CurY)).
+  isvalidpositionofball((CurX + 1, CurY), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (0, 1) % Top velocity vector
 ) :-
-  isvalidpositionofball((CurX, CurY + 1)).
+  isvalidpositionofball((CurX, CurY + 1), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (1, 1) % Right top velocity vector
 ) :-
-  isvalidpositionofball((CurX + 1, CurY + 1)).
+  isvalidpositionofball((CurX + 1, CurY + 1), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (-1, 0) % Left velocity vector
 ) :-
-  isvalidpositionofball((CurX - 1, CurY)).
+  isvalidpositionofball((CurX - 1, CurY), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (0, -1) % Bottom velocity vector
 ) :-
-  isvalidpositionofball((CurX, CurY - 1)).
+  isvalidpositionofball((CurX, CurY - 1), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (-1, -1) % Bottom left velocity vector
 ) :-
-  isvalidpositionofball((CurX - 1, CurY - 1)).
+  isvalidpositionofball((CurX - 1, CurY - 1), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (1, -1) % Bottom right velocity vector
 ) :-
-  isvalidpositionofball((CurX + 1, CurY - 1)).
+  isvalidpositionofball((CurX + 1, CurY - 1), Visited).
 
 ispassavailableindirection(
   (CurX, CurY),
+  Visited,
   (-1, 1) % Top left velocity vector
 ) :-
-  isvalidpositionofball((CurX - 1, CurY + 1)).
+  isvalidpositionofball((CurX - 1, CurY + 1), Visited).
 
 % Trace the ball in the given direction (specified by the velocity vecror) and assign the coordinates
 % of the first encountered human, if it was not intercepted or flew out of bounds
 traceballpass(
   (CurX, CurY), % current position of the ball
   (VelocityX, VelocityY), % velocity vector of the ball
+  _,
   (ResultX, ResultY) % coordinates of the human who caught the ball, in case of success
 ) :-
   ResultX is CurX + VelocityX,
   ResultY is CurY + VelocityY,
-  h(NewX, NewY),
+  h(ResultX, ResultY),
   !.
 
 traceballpass(
   (CurX, CurY), % current position of the ball
   (VelocityX, VelocityY), % velocity vector of the ball
+  Visited,
   (ResultX, ResultY) % coordinates of the human who caught the ball, in case of success
 ) :-
   % Recursive case: add velocity of the ball to the coordinates and check the new posiotion of the ball
   NewX is CurX + VelocityX,
   NewY is CurY + VelocityY,
-  isvalidpositionofball((NewX, NewY)),
-  traceballpass((NewX, NewY), (VelocityX, VelocityY), (ResultX, ResultY)).
+  isvalidpositionofball((NewX, NewY), Visited),
+  traceballpass((NewX, NewY), (VelocityX, VelocityY), Visited, (ResultX, ResultY)).
 
 % Finds the solutions to the game
 solvegamerec(
@@ -228,11 +245,11 @@ solvegamerec(
   OutNumMoves % output number of actions of the solution
 ) :-
   % Recursive case - pass the ball
-  ispassavailableindirection((CurX, CurY), VelocityVec), % get the direction to throw the ball in
-  traceballpass((CurX, CurY), VelocityVec, (NewX, NewY)), % get the new coordinates of a human who caught the ball
+  ispassavailableindirection((CurX, CurY), Visited, VelocityVec), % get the direction to throw the ball in
+  traceballpass((CurX, CurY), VelocityVec, Visited, (NewX, NewY)), % get the new coordinates of a human who caught the ball
   NewActions = [(pass, (NewX, NewY)) | Actions], % add move to new coordinates to the lsit of actions
   NewNumMoves is NumMoves + 1, % increment the number of actions
-  solvegamerec((NewX, NewY), true, [], NewActions, NewNumMoves, OutActions, OutNumMoves).
+  solvegamerec((NewX, NewY), true, Visited, NewActions, NewNumMoves, OutActions, OutNumMoves).
 
 % Function that solves the game and returns the path along with its length
 solvegame(Actions, NumMoves) :-
