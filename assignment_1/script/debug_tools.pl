@@ -1,3 +1,5 @@
+:- dynamic solvegame/2.
+
 solutionstofile(FilePath) :-
   open(FilePath, write, Stream),
   findall((A, N), solvegame(A, N), L),
@@ -7,4 +9,4 @@ solutionstofile(FilePath) :-
 solutionsordered(L) :-
   setof((N, A), solvegame(A, N), L).
 
-% findall(N, solvegame(A, N), L), length(L, Len).
+% findall(N, solvegame(A, N), L), length(L, Len), min_list(L, M).

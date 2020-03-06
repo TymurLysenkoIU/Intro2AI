@@ -5,14 +5,14 @@ use_module(library(yall)).
 % Library with dictionary utilities
 % use_module(library(dicts)).
 
-h(_, _) :- false.
-o(_, _) :- false.
-t(_, _) :- false.
+:- dynamic h/2.
+:- dynamic o/2.
+:- dynamic t/2.
 
 minX(0).
-maxX(20).
+maxX(10).
 minY(0).
-maxY(20).
+maxY(10).
 
 % Checks if the move is legal
 ismoveavailable(
