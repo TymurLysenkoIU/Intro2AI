@@ -9,6 +9,11 @@ solutionstofile(FilePath) :-
 solutionsordered(L) :-
   setof((N, A), solvegame(A, N), L).
 
+thebestsolution(Len, Sol) :-
+  solutionsordered(L), nth0(0, L, (Len, Sol)).
+
+% set_prolog_flag(answer_write_options,[max_depth(0)]).
+
 % ['backtrack.pl'].
 % ['../test/prolog/1-from-task.pl'].
 % ['../script/debug_tools.pl'].

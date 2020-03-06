@@ -10,9 +10,9 @@ use_module(library(yall)).
 :- dynamic t/2.
 
 minX(0).
-maxX(10).
+maxX(9).
 minY(0).
-maxY(10).
+maxY(9).
 
 % Checks if the move is legal
 ismoveavailable(
