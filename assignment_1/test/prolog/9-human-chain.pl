@@ -1,9 +1,11 @@
 % Map, that can be solved in one move by giving the ball to the humans until it reaches the touchdown
 
+test_name('9-human-chain').
+
 minX(0).
-maxX(9).
+maxX(7).
 minY(0).
-maxY(9).
+maxY(7).
 
 h(0, 1).
 h(0, 2).

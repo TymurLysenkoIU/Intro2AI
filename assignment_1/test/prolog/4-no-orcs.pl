@@ -1,8 +1,10 @@
 % Map that has no orcs
 
-minX(0).
-maxX(9).
-minY(0).
-maxY(9).
+test_name('4-no-orcs').
 
-t(1, 3).
+minX(0).
+maxX(3).
+minY(0).
+maxY(3).
+
+t(1, 2).

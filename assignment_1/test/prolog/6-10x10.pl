@@ -1,5 +1,7 @@
 % Map of the size 10x10 with many orcs, human initially surrounded by orcs and touchdown is in a corner
 
+test_name('6-10x10').
+
 minX(0).
 maxX(9).
 minY(0).

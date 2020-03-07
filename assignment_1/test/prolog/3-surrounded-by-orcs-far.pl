@@ -1,5 +1,7 @@
 % Map where a human is surrounded by orcs, hence can't move anywhere
 
+test_name('3-surrounded-by-orcs-far').
+
 minX(0).
 maxX(9).
 minY(0).

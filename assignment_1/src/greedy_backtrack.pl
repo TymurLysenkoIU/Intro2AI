@@ -2,8 +2,6 @@
 
 % Library for lambdas
 use_module(library(yall)).
-% Library with dictionary utilities
-% use_module(library(dicts)).
 
 :- dynamic h/2.
 :- dynamic o/2.
@@ -275,3 +273,31 @@ solvegame(Actions, NumMoves) :-
   MinMovesSoFar is MaxX * MaxY,
   nb_setval(min_moves_so_far, MinMovesSoFar),
   solvegamerec((0, 0), false, [], [], 0, Actions, NumMoves).
+
+solvegamewithstatistics(Solutions, RunTime) :-
+  statistics(runtime, [StartTime, _]),
+  setof((NumActs, Actions), solvegame(Actions, NumActs), Solutions),
+  statistics(runtime, [EndTime, _]),
+  RunTime is EndTime - StartTime.
+
+% Run the function to calculate the best solution of a map and print it
+main() :-
+  solvegamewithstatistics(Result, RunTime) ->
+  (
+    nth0(0, Result, (SolLen, RevSol)), % The best solution is the first in Result, since it is sorted by the length
+    reverse(RevSol, Sol),
+    format('~d~n', [SolLen]),
+    maplist([(ActionType, X, Y)] >> (
+        ActionType = pass ->
+          format('P ~d ~d~n', [X, Y])
+        ;
+          format('~d ~d~n', [X, Y])
+      ),
+      Sol
+    ),
+    format('~d msec~n', [RunTime])
+  )
+  ;
+  (
+    format('Not able to solve the map.')
+  ).

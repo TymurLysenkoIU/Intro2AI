@@ -1,5 +1,7 @@
 % Map, where there is a wide diagonal corridor (human can move from the initial position) and he needs to pass the ball to other to win fast
 
+test_name('13-diagonal-corridor-wide').
+
 minX(0).
 maxX(7).
 minY(0).

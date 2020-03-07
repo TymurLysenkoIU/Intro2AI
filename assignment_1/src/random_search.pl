@@ -2,8 +2,6 @@
 
 % Library for lambdas
 use_module(library(yall)).
-% Library with dictionary utilities
-% use_module(library(dicts)).
 
 :- dynamic h/2.
 :- dynamic o/2.

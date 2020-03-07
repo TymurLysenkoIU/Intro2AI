@@ -1,5 +1,7 @@
 % Map with the maze, where the human is surrounded by orcs and has only 1 cell at each stage to move closer towards the touchdown
 
+test_name('14-maze').
+
 minX(0).
 maxX(6).
 minY(0).

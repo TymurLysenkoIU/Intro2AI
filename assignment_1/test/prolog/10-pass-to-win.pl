@@ -1,5 +1,7 @@
 % Map, where to win the human has pass the ball diagonally and move to the touchdown
 
+test_name('10-pass-to-win').
+
 minX(0).
 maxX(9).
 minY(0).
