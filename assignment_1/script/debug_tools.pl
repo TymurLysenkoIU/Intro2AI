@@ -19,3 +19,5 @@ thebestsolution(Len, Sol) :-
 % ['../script/debug_tools.pl'].
 
 % findall(N, solvegame(A, N), L), length(L, Len), min_list(L, M).
+
+% findnsols(100, (NumActs, Actions), solvegame(Actions, NumActs), Solutions), !, length(Solutions, Len).
