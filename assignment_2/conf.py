@@ -1,6 +1,6 @@
 # Path to the image to be processed
 IMAGE_BASE_PATH = './img/'
-IMAGE_NAME = 'ricado_1.jpg'
+IMAGE_NAME = 'ricardo_1.jpg'
 IMAGE_PATH = IMAGE_BASE_PATH + IMAGE_NAME
 
 # Visual parameters
@@ -11,3 +11,9 @@ MAX_NUM_POLYGON_VERTICES = 17
 # Sizes of the circumscribed circle around a polygon; half-open interval
 MIN_CIRCUMSCRIBED_CIRCLE_SIZE = 5   # px
 MAX_CIRCUMSCRIBED_CIRCLE_SIZE = 31  # px
+
+# Initial number of polygons on the image
+INITIAL_NUM_POLYGONS_SCALE = 0.1
+
+# Number of images in the population
+POPULATION_SIZE = 20

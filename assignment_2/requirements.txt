@@ -3,3 +3,4 @@ jupyter
 matplotlib
 # Pillow
 scikit-image
+imageio
