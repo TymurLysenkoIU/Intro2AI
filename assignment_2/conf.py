@@ -13,7 +13,7 @@ MIN_CIRCUMSCRIBED_CIRCLE_SIZE = 5   # px
 MAX_CIRCUMSCRIBED_CIRCLE_SIZE = 31  # px
 
 # Initial number of polygons on the image
-INITIAL_NUM_POLYGONS_SCALE = 0.1
+INITIAL_NUM_POLYGONS_SCALE = 0.05
 
 # Number of images in the population
 POPULATION_SIZE = 20
